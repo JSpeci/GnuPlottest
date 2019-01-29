@@ -29,23 +29,29 @@ namespace GnuPlotTest
             var values2 = result.Select(i => double.Parse(i.GetMemberValue("I_avg_3I").ToString())).Take(8644).ToArray();
             var values3 = result.Select(i => double.Parse(i.GetMemberValue("U_avg_U3").ToString())).Take(8644).ToArray();
 
+            GnuPlot.Set("encoding utf8");
+
             string tempfolder = System.IO.Path.GetTempPath();
-
-            //set output to pdf
-            GnuPlot.Set("terminal pdf size 10in,8in");
-            GnuPlot.Set("output \"" + tempfolder + "P_avg_3P_C_fromGnuPlot.pdf\"");
-
-            //set common properties of plot
-            GnuPlot.Set("multiplot layout 3, 1 title \"1.4.2018\" font \", 14\"");
-            GnuPlot.Set("tmargin 3");
-            GnuPlot.Set("bmargin 3");
-            GnuPlot.Set("rmargin 3");
-            GnuPlot.Set("lmargin 3");
-
+            tempfolder = "C:\\\\Users\\\\King\\\\Documents\\\\BP\\\\";
             //data
             GnuPlot.SaveData(hours, values, tempfolder + "plot1.data");
             GnuPlot.SaveData(hours, values2, tempfolder + "plot2.data");
             GnuPlot.SaveData(hours, values3, tempfolder + "plot3.data");
+
+            string output = "output \"" + tempfolder + "P_avg_3P_C_fromGnuPlot.pdf\"";
+            //set output to pdf
+            GnuPlot.Set("terminal pdf size 10in,8in");
+            //GnuPlot.Set("terminal pdf enhanced size 16cm,8cm font \", 10\"");
+            GnuPlot.Set(output);
+
+
+            //set common properties of plot
+            string multiplot = "multiplot layout 3, 1 title \"1.4.2018\" font \", 14\"";
+            GnuPlot.Set(multiplot);
+            GnuPlot.Set("tmargin 3");
+            GnuPlot.Set("bmargin 3");
+            GnuPlot.Set("rmargin 10");
+            GnuPlot.Set("lmargin 10");
 
             //first line
             GnuPlot.Set("xrange  [0:24]");
@@ -82,6 +88,14 @@ namespace GnuPlotTest
             GnuPlot.Unset("key");
             GnuPlot.Plot(tempfolder + "plot3.data", "with linespoints pt " + (int)PointStyles.Dot + " lt 2 lw 4");
 
+            //trying To REMOVe if not works
+            GnuPlot.Unset("multiplot");
+            GnuPlot.Unset("output");
+
+
+            //GnuPlot.Replot();
+            //GnuPlot.Write("pause 10");
+            //GnuPlot.Write("reread");
 
             //GnuPlot.Set("terminal png size 800,600");
             //GnuPlot.Set("output \"P_avg_3P_C_fromGnuPlot.png\"");
